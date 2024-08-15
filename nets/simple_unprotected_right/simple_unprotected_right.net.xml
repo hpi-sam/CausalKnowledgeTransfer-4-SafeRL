@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2024-08-15 13:57:58 by Eclipse SUMO netconvert Version 1.20.0
+<!-- generated on 2024-08-15 14:30:55 by Eclipse SUMO netconvert Version 1.20.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
 
     <input>
         <node-files value="netconfig/nodes.nod.xml"/>
         <edge-files value="netconfig/edges.edg.xml"/>
         <connection-files value="netconfig/connections.con.xml"/>
+        <tllogic-files value="netconfig/tllogics.tll.xml"/>
     </input>
 
     <output>
@@ -45,7 +46,12 @@
     </edge>
 
     <tlLogic id="trafficLight" type="static" programID="0" offset="0">
-        <phase duration="90" state="GGG"/>
+        <phase duration="27" state="rrG" name="safe"/>
+        <phase duration="3"  state="rrG" name="yellowAfterSafe"/>
+        <phase duration="27" state="GrG" name="unprotected"/>
+        <phase duration="3"  state="yry" name="yellowAfterUnprotected"/>
+        <phase duration="27" state="GGr" name="protected"/>
+        <phase duration="3"  state="yyr" name="yellowAfterProtected"/>
     </tlLogic>
 
     <junction id="east" type="dead_end" x="1000.00" y="500.00" incLanes="junctionEast_0" intLanes="" shape="1000.00,498.40 1000.00,501.60" fringe="outer"/>
