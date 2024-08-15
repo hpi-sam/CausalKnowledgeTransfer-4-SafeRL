@@ -1,0 +1,8 @@
+<edges>
+
+    <edge id="westJunction" from="west" to="junction" priority="1" numLanes="1" speed="50.0" spreadType="center"/>
+    <edge id="junctionNorth" from="junction" to="north" priority="1" numLanes="1" speed="50.0" spreadType="center"/>
+    <edge id="junctionEast" from="junction" to="east" priority="1" numLanes="1" speed="50.0" spreadType="center"/>
+    <edge id="southJunction" from="south" to="junction" priority="1" numLanes="2" speed="50.0" spreadType="center"/>
+
+</edges>

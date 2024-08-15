@@ -1,0 +1,10 @@
+<nodes>
+
+    <node id="junction" x="0.0" y="0.0" type="traffic_light_unregulated" tl="trafficLight"/>
+
+    <node id="west" x="-500.0" y="0.0" type="unregulated" fringe="outer"/>
+    <node id="north" x="0.0" y="500.0" type="unregulated" fringe="outer"/>
+    <node id="east" x="500.0" y="0.0" type="unregulated" fringe="outer"/>
+    <node id="south" x="0.0" y="-500.0" type="unregulated" fringe="outer"/>
+
+</nodes>
