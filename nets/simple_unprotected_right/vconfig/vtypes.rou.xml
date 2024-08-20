@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <vType id="car30" desiredMaxSpeed="8.33"/> <!-- 30 km/h -->
+    <vType id="car50" desiredMaxSpeed="13.89"/> <!-- 50 km/h -->
+    <vType id="car50Collision" desiredMaxSpeed="13.89" jmIgnoreFoeProb="1" jmIgnoreJunctionFoeProb="1"/> <!-- 50 km/h -->
+    <vType id="car80" desiredMaxSpeed="22.22"/> <!-- 80 km/h -->
+    <vType id="car100" desiredMaxSpeed="27.78"/> <!-- 100 km/h -->
+    <vType id="car130" desiredMaxSpeed="36.11"/> <!-- 130 km/h -->
+</routes>
