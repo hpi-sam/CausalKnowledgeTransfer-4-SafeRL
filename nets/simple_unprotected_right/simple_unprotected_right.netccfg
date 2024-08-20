@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2024-08-20 18:32:41 by Eclipse SUMO netconvert Version 1.20.0
+netconvert \
+  -node-files=netconfig/nodes.nod.xml \
+  -edge-files=netconfig/edges.edg.xml \
+  -connection-files=netconfig/connections.con.xml  \
+  -tllogic-files=netconfig/tllogics.tll.xml \
+  -output-file=simple_unprotected_right.net.xml \
+  -save-configuration simple_unprotected_right.netccfg \
+  -save-commented true
+-->
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <!-- Read XML-node defs from FILE -->
+        <node-files value="netconfig/nodes.nod.xml"/>
+
+        <!-- Read XML-edge defs from FILE -->
+        <edge-files value="netconfig/edges.edg.xml"/>
+
+        <!-- Read XML-connection defs from FILE -->
+        <connection-files value="netconfig/connections.con.xml"/>
+
+        <!-- Read XML-traffic light defs from FILE -->
+        <tllogic-files value="netconfig/tllogics.tll.xml"/>
+
+    </input>
+
+    <output>
+        <!-- The generated net will be written to FILE -->
+        <output-file value="simple_unprotected_right.net.xml"/>
+
+    </output>
+
+</configuration>

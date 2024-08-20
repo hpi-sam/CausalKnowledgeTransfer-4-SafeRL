@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2024-08-20 18:38:19 by Eclipse SUMO duarouter Version 1.20.0
+duarouter \
+  -net-file simple_unprotected_right.net.xml \
+  -route-files vconfig/vtypes.rou.xml,routes.rou.xml,vconfig/vehicles.rou.xml \
+  -output-file config.rou.xml
+-->
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/duarouterConfiguration.xsd">
+
+    <input>
+        <!-- Use FILE as SUMO-network to route on -->
+        <net-file value="simple_unprotected_right.net.xml"/>
+
+        <!-- Read sumo routes, alternatives, flows, and trips from FILE(s) -->
+        <route-files value="vconfig/vtypes.rou.xml,routes.rou.xml,vconfig/vehicles.rou.xml"/>
+
+    </input>
+
+    <output>
+        <!-- Write generated routes to FILE -->
+        <output-file value="config.rou.xml"/>
+
+    </output>
+
+</configuration>

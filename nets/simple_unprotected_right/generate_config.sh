@@ -1,12 +1,7 @@
 END_TIME=3600
 REPEAT_PERIOD=10
 
-netconvert \
-  --node-files=netconfig/nodes.nod.xml \
-  --edge-files=netconfig/edges.edg.xml \
-  --connection-files=netconfig/connections.con.xml  \
-  --tllogic-files=netconfig/tllogics.tll.xml \
-  --output-file=simple_unprotected_right.net.xml
+netconvert -c simple_unprotected_right.netccfg
 
 python $SUMO_HOME/tools/findAllRoutes.py \
   -n simple_unprotected_right.net.xml \
@@ -14,10 +9,7 @@ python $SUMO_HOME/tools/findAllRoutes.py \
   -s southJunction,westJunction \
   -t junctionEast,junctionNorth
 
-duarouter \
-  --net-file simple_unprotected_right.net.xml \
-  --route-files vconfig/vtypes.rou.xml,routes.rou.xml,vconfig/vehicles.rou.xml \
-  --output-file config.rou.xml
+duarouter -c simple_unprotected_right.duarcfg
 
 python $SUMO_HOME/tools/route/vehicle2flow.py config.rou.xml \
   -o simple_unprotected_right.rou.xml \
@@ -35,8 +27,8 @@ sumo \
   --collision.check-junctions true \
   --default.speeddev 0.1 \
   --random \
-  --save-configuration sumo.config.xml \
- --save-commented true
+  --save-configuration simple_unprotected_right.sumocfg \
+  --save-commented true
 
 mkdir -p output
 
