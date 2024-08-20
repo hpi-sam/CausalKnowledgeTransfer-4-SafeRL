@@ -37,3 +37,7 @@ sumo \
   --random \
   --save-configuration sumo.config.xml \
  --save-commented true
+
+mkdir -p output
+
+echo "Done!"
