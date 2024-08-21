@@ -1,3 +1,8 @@
 /.idea/
 /nets/simple_unprotected_right/output/*
 /nets/simple_unprotected_right/*.xml
+/env/output/*
+
+__pycache__/
+*.py[cod]
+*$py.class
