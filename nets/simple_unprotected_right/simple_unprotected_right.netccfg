@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2024-08-20 18:32:41 by Eclipse SUMO netconvert Version 1.20.0
-netconvert \
-  -node-files=netconfig/nodes.nod.xml \
-  -edge-files=netconfig/edges.edg.xml \
-  -connection-files=netconfig/connections.con.xml  \
-  -tllogic-files=netconfig/tllogics.tll.xml \
-  -output-file=simple_unprotected_right.net.xml \
-  -save-configuration simple_unprotected_right.netccfg \
-  -save-commented true
+<!-- generated on 2024-08-21 13:44:13 by Eclipse SUMO netconvert Version 1.20.0
 -->
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
@@ -33,5 +25,11 @@ netconvert \
         <output-file value="simple_unprotected_right.net.xml"/>
 
     </output>
+
+    <building_defaults>
+        <!-- The default friction on an edge -->
+        <default.friction value="1.0"/>
+
+    </building_defaults>
 
 </configuration>
