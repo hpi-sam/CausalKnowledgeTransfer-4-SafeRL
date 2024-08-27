@@ -5,27 +5,23 @@ from sumo_rl import SumoEnvironment, TrafficSignal, ObservationFunction
 
 class SumoEnvironmentGenerator:
 
-    def __init__(self, net_file: str, route_file: str, sumocfg_file: str, duration: int, learning_data_csv_name: str,
-                 simulation_output_prefix: str):
+    def __init__(self, net_file: str, route_file: str, sumocfg_file: str, duration: int, learning_data_csv_name: str):
         self.net_file = net_file
         self.route_file = route_file
         self.sumocfg_file = sumocfg_file
         self.duration = duration
         self.learning_data_csv_name = learning_data_csv_name
-        self.simulation_output_prefix = simulation_output_prefix
 
-    def get_env(self, env_type: str):
-        match env_type:
-            case 'training':
-                return self._get_environment(self.net_file, self.route_file, self.sumocfg_file, False, self.duration,
-                                             out_csv_name=self.learning_data_csv_name)
-            case 'generation':
-                return self._get_environment(self.net_file, self.route_file, self.sumocfg_file, False, self.duration,
-                                             output_prefix=self.simulation_output_prefix)
-            case 'demonstration':
-                return self._get_environment(self.net_file, self.route_file, self.sumocfg_file, True, self.duration)
-            case _:
-                print("Environment type not supported")
+    def get_training_env(self):
+        return self._get_environment(self.net_file, self.route_file, self.sumocfg_file, False, self.duration,
+                                     out_csv_name=self.learning_data_csv_name)
+
+    def get_generation_env(self, output_prefix: str):
+        return self._get_environment(self.net_file, self.route_file, self.sumocfg_file, False, self.duration,
+                                     output_prefix=output_prefix)
+
+    def get_demonstration_env(self):
+        return self._get_environment(self.net_file, self.route_file, self.sumocfg_file, True, self.duration)
 
     @staticmethod
     def _reward_fn(traffic_signal: TrafficSignal) -> float:
