@@ -18,3 +18,5 @@ Causal-Based Knowledge Transfer in Safe Reinforcement Learning
     * Use `pip install 'stable-baselines3[extra]'` (' required for some shells)
 7. Install Tensorflow https://www.tensorflow.org/install
     * Use `pip install tensorflow`
+      * There might be a dependency issue: ortools 9.10.4067 requires protobuf>=5.26.1, but you have protobuf 4.25.4 which is incompatible.
+      * `pip install ortools==9.9.3963` fixes that
