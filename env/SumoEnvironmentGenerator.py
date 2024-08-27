@@ -5,11 +5,27 @@ from sumo_rl import SumoEnvironment, TrafficSignal, ObservationFunction
 
 class SumoEnvironmentGenerator:
 
-    def __init__(self, net_file: str, route_file: str, sumocfg_file: str, duration: int, out_csv_name: str):
-        self.training = self._get_environment(net_file, route_file, sumocfg_file, False, duration)
-        self.generation = self._get_environment(net_file, route_file, sumocfg_file, False, duration,
-                                                out_csv_name=out_csv_name)
-        self.demonstration = self._get_environment(net_file, route_file, sumocfg_file, True, duration)
+    def __init__(self, net_file: str, route_file: str, sumocfg_file: str, duration: int, learning_data_csv_name: str,
+                 simulation_output_prefix: str):
+        self.net_file = net_file
+        self.route_file = route_file
+        self.sumocfg_file = sumocfg_file
+        self.duration = duration
+        self.learning_data_csv_name = learning_data_csv_name
+        self.simulation_output_prefix = simulation_output_prefix
+
+    def get_env(self, env_type: str):
+        match env_type:
+            case 'training':
+                return self._get_environment(self.net_file, self.route_file, self.sumocfg_file, False, self.duration,
+                                             out_csv_name=self.learning_data_csv_name)
+            case 'generation':
+                return self._get_environment(self.net_file, self.route_file, self.sumocfg_file, False, self.duration,
+                                             output_prefix=self.simulation_output_prefix)
+            case 'demonstration':
+                return self._get_environment(self.net_file, self.route_file, self.sumocfg_file, True, self.duration)
+            case _:
+                print("Environment type not supported")
 
     @staticmethod
     def _reward_fn(traffic_signal: TrafficSignal) -> float:
@@ -20,7 +36,15 @@ class SumoEnvironmentGenerator:
 
     @staticmethod
     def _get_environment(net_file: str, route_file: str, sumocfg_file: str, use_gui: bool, num_seconds: int,
-                         out_csv_name: str = None):
+                         out_csv_name: str = None, output_prefix: str = ''):
+
+        sumo_cmd_options = {'--configuration-file': sumocfg_file}
+        if output_prefix:
+            sumo_cmd_options['--output-prefix'] = output_prefix + '_'
+            sumo_cmd_options['--statistic-output'] = 'statistics.xml'
+            sumo_cmd_options['--collision-output'] = 'collisions.xml'
+        sumo_cmd = ' '.join(key + " " + value for key, value in sumo_cmd_options.items())
+
         env: SumoEnvironment = SumoEnvironment(
             net_file=net_file,
             route_file=route_file,
@@ -38,7 +62,7 @@ class SumoEnvironmentGenerator:
             add_per_agent_info=True,
             sumo_seed='random',
             sumo_warnings=use_gui,  # show warnings when gui is active
-            additional_sumo_cmd=f'--configuration-file {sumocfg_file}',
+            additional_sumo_cmd=sumo_cmd,
         )
 
         return env

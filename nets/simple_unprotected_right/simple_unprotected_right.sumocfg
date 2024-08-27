@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2024-08-21 13:49:11 by Eclipse SUMO sumo Version 1.20.0
+<!-- generated on 2024-08-27 19:46:40 by Eclipse SUMO sumo Version 1.20.0
 -->
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
@@ -14,18 +14,6 @@
 
     </input>
 
-    <output>
-        <!-- Prefix which is applied to all output files. The special string &apos;TIME&apos; is replaced by the current time. -->
-        <output-prefix value="output/"/>
-
-        <!-- Write collision information into FILE -->
-        <collision-output value="collisions.xml"/>
-
-        <!-- Write overall statistics into FILE -->
-        <statistic-output value="statistics.xml"/>
-
-    </output>
-
     <processing>
         <!-- How to deal with collisions: [none,warn,teleport,remove] -->
         <collision.action value="teleport"/>
@@ -37,18 +25,6 @@
         <default.speeddev value="0.1"/>
 
     </processing>
-
-    <ssm_device>
-        <!-- The probability for a vehicle to have a &apos;ssm&apos; device -->
-        <device.ssm.probability value="1"/>
-
-        <!-- Specifies which measures will be logged (as a space or comma-separated sequence of IDs in (&apos;TTC&apos;, &apos;DRAC&apos;, &apos;PET&apos;, &apos;PPET&apos;,&apos;MDRAC&apos;)) -->
-        <device.ssm.measures value="BR"/>
-
-        <!-- Give a global default filename for the SSM output -->
-        <device.ssm.file value="ssm.xml"/>
-
-    </ssm_device>
 
     <random_number>
         <!-- Initialises the random number generator with the current system time -->

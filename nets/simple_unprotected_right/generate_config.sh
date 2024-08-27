@@ -32,18 +32,18 @@ python $SUMO_HOME/tools/route/vehicle2flow.py config.rou.xml \
 sumo \
   --net-file simple_unprotected_right.net.xml \
   --route-files simple_unprotected_right.rou.xml \
-  --output-prefix "output/" \
-  --statistic-output statistics.xml \
-  --collision-output collisions.xml \
-  --device.ssm.probability 1 \
-  --device.ssm.file ssm.xml \
-  --device.ssm.measures "BR" \
   --collision.action "teleport" \
   --collision.check-junctions true \
   --default.speeddev 0.1 \
   --random \
   --save-configuration simple_unprotected_right.sumocfg \
   --save-commented true
+#  --output-prefix "NUL" \
+#  --statistic-output statistics.xml \
+#  --collision-output collisions.xml \
+#  --device.ssm.probability 1 \
+#  --device.ssm.file ssm.xml \
+#  --device.ssm.measures "BR" \
 
 mkdir -p output
 
