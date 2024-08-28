@@ -39,6 +39,7 @@ class SumoEnvironmentGenerator:
             sumo_cmd_options['--output-prefix'] = output_prefix + '_'
             sumo_cmd_options['--statistic-output'] = 'statistics.xml'
             sumo_cmd_options['--collision-output'] = 'collisions.xml'
+            sumo_cmd_options['--tripinfo-output'] = 'tripinfo.xml'
         sumo_cmd = ' '.join(key + " " + value for key, value in sumo_cmd_options.items())
 
         env: SumoEnvironment = SumoEnvironment(
