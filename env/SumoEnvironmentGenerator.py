@@ -1,6 +1,7 @@
 import numpy as np
 from gymnasium import spaces
 from sumo_rl import SumoEnvironment, TrafficSignal, ObservationFunction
+from pathlib import Path
 
 
 class SumoEnvironmentGenerator:
@@ -33,13 +34,15 @@ class SumoEnvironmentGenerator:
     @staticmethod
     def _get_environment(net_file: str, route_file: str, sumocfg_file: str, use_gui: bool, num_seconds: int,
                          out_csv_name: str = None, output_prefix: str = ''):
-
         sumo_cmd_options = {'--configuration-file': sumocfg_file}
         if output_prefix:
-            sumo_cmd_options['--output-prefix'] = output_prefix + '_'
-            sumo_cmd_options['--statistic-output'] = 'statistics.xml'
-            sumo_cmd_options['--collision-output'] = 'collisions.xml'
+            # sumo_cmd_options['--output-prefix'] = output_prefix + '_'
+            sumo_cmd_options['--statistic-output'] = output_prefix + '_statistics.xml'
+            sumo_cmd_options['--collision-output'] = output_prefix + '_collisions.xml'
             sumo_cmd_options['--tripinfo-output'] = 'tripinfo.xml'
+            sumo_cmd_options['--device.ssm.probability'] = '1.0'
+            sumo_cmd_options['--device.ssm.file'] = str(Path(output_prefix + '_ssm.xml').absolute())
+            sumo_cmd_options['--device.ssm.measures'] = "BR"
         sumo_cmd = ' '.join(key + " " + value for key, value in sumo_cmd_options.items())
 
         env: SumoEnvironment = SumoEnvironment(
@@ -72,7 +75,8 @@ class FrictionObservationFunction(ObservationFunction):
         min_green = [0 if self.ts.time_since_last_phase_change < self.ts.min_green + self.ts.yellow_time else 1]
         density = self.ts.get_lanes_density()
         queue = self.ts.get_lanes_queue()
-        lane_friction = [self.ts.sumo.lane.getFriction(lane) for lane in self.ts.lanes]
+        # lane_friction = [self.ts.sumo.lane.getFriction(lane) for lane in self.ts.lanes]
+        lane_friction = [self.ts.sumo.lane.getParameter(lane, 'frictionCoefficient') for lane in self.ts.lanes]
         lane_mean_speeds = [self.ts.sumo.lane.getLastStepMeanSpeed(lane) for lane in self.ts.lanes]
         observation = np.array(phase_id + min_green + density + queue + lane_friction + lane_mean_speeds,
                                dtype=np.float32)
