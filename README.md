@@ -25,3 +25,5 @@ Causal-Based Knowledge Transfer in Safe Reinforcement Learning
     * Use `pip install notebook`
 10. Install seaborn https://seaborn.pydta.org/installing.html
     * Use `pip install seaborn`
+11. Install gCastle
+    * Use `pip install gcastle==1.0.4rc1`

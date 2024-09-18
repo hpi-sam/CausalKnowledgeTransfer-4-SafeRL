@@ -7,4 +7,5 @@
     <vType id="car80" desiredMaxSpeed="22.22"/> <!-- 80 km/h -->
     <vType id="car100" desiredMaxSpeed="27.78"/> <!-- 100 km/h -->
     <vType id="car130" desiredMaxSpeed="36.11"/> <!-- 130 km/h -->
+    <vType id="carCustom"/>
 </routes>
