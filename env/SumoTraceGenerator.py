@@ -28,7 +28,7 @@ class SumoTraceGenerator:
             obs, info = env.reset()
             # Revisit Friction calculation
             vehicletype = env.sumo.vehicletype
-            vehicletype.setAccel('carCustom', speed)
+            vehicletype.setMaxSpeed('carCustom', speed)
             vehicletype.setDecel('carCustom', vehicletype.getDecel('carCustom') * friction_coefficient)
             vehicletype.setEmergencyDecel('carCustom',
                                           vehicletype.getEmergencyDecel('carCustom') * friction_coefficient)

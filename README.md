@@ -27,3 +27,6 @@ Causal-Based Knowledge Transfer in Safe Reinforcement Learning
     * Use `pip install seaborn`
 11. Install gCastle
     * Use `pip install gcastle==1.0.4rc1`
+12. Install tqdm
+    * Use `pip install tqdm`
+    * `pip install ipywidgets`
