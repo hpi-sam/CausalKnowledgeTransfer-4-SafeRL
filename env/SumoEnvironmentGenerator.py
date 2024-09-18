@@ -39,7 +39,7 @@ class SumoEnvironmentGenerator:
             # sumo_cmd_options['--output-prefix'] = output_prefix + '_'
             sumo_cmd_options['--statistic-output'] = output_prefix + '_statistics.xml'
             sumo_cmd_options['--collision-output'] = output_prefix + '_collisions.xml'
-            sumo_cmd_options['--tripinfo-output'] = 'tripinfo.xml'
+            sumo_cmd_options['--tripinfo-output'] = output_prefix + '_tripinfo.xml'
             sumo_cmd_options['--device.ssm.probability'] = '1.0'
             sumo_cmd_options['--device.ssm.file'] = str(Path(output_prefix + '_ssm.xml').absolute())
             sumo_cmd_options['--device.ssm.measures'] = "BR"
