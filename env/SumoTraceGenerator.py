@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from stable_baselines3 import A2C
 
-from env.SumoEnvironmentGenerator import SumoEnvironmentGenerator
+from SumoEnvironmentGenerator import SumoEnvironmentGenerator
 
 
 class SumoTraceGenerator:
