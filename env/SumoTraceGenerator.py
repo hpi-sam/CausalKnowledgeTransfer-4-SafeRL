@@ -46,7 +46,7 @@ class SumoTraceGenerator:
         return 1
 
 def main():
-    from env.SumoEnvironmentGenerator import SumoEnvironmentGenerator
+    from SumoEnvironmentGenerator import SumoEnvironmentGenerator
     from pathlib import Path
     from tqdm import tqdm
     import itertools
