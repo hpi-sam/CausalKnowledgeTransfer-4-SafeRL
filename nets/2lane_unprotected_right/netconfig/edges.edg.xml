@@ -1,0 +1,33 @@
+<edges>
+
+    <edge id="westJunction" from="west" to="junction" priority="1" numLanes="2" speed="55.56" spreadType="center">
+        <lane index="0">
+            <param key="frictionCoefficient" value="1.0"/>
+        </lane>
+        <lane index="1" changeRight="emergency">
+            <param key="frictionCoefficient" value="1.0"/>
+        </lane>
+    </edge>
+    <edge id="junctionNorth" from="junction" to="north" priority="1" numLanes="1" speed="55.56" spreadType="center">
+        <lane index="0">
+            <param key="frictionCoefficient" value="1.0"/>
+        </lane>
+    </edge>
+    <edge id="junctionEast" from="junction" to="east" priority="1" numLanes="2" speed="55.56" spreadType="center">
+        <lane index="0">
+            <param key="frictionCoefficient" value="1.0"/>
+        </lane>
+        <lane index="1">
+            <param key="frictionCoefficient" value="1.0"/>
+        </lane>
+    </edge>
+    <edge id="southJunction" from="south" to="junction" priority="1" numLanes="2" speed="55.56" spreadType="center">
+        <lane index="0">
+            <param key="frictionCoefficient" value="1.0"/>
+        </lane>
+        <lane index="1">
+            <param key="frictionCoefficient" value="1.0"/>
+        </lane>
+    </edge>
+
+</edges>

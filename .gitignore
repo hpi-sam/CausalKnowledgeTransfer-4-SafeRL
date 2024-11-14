@@ -5,6 +5,9 @@ __pycache__/
 
 /nets/simple_unprotected_right/output/*
 /nets/simple_unprotected_right/*.xml
+/nets/2lane_unprotected_right/output/*
+/nets/2lane_unprotected_right/*.xml
 /env/training_data/*
+/env/training_data_2lane/*
 /dqn_sumo_tensorboard/
 /data/

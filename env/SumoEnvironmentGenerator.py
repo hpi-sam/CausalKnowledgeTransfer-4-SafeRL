@@ -3,6 +3,8 @@ from gymnasium import spaces
 from sumo_rl import SumoEnvironment, TrafficSignal, ObservationFunction
 from pathlib import Path
 
+from env.CollisionAwareTrafficSignal import CollisionAwareTrafficSignal
+
 
 class SumoEnvironmentGenerator:
 
@@ -32,6 +34,37 @@ class SumoEnvironmentGenerator:
         return reward
 
     @staticmethod
+    def _penalty_reward_minute_fn(traffic_signal: TrafficSignal) -> float:
+        simulation = traffic_signal.sumo.simulation
+        collisions = simulation.getCollisions()
+        ts_wait = sum(traffic_signal.get_accumulated_waiting_time_per_lane())
+        reward = traffic_signal.last_measure - ts_wait
+        traffic_signal.last_measure = ts_wait
+        if collisions:
+            reward = -60
+        return reward
+
+    @staticmethod
+    def _penalty_reward_fn(traffic_signal: TrafficSignal) -> float:
+        collisions = traffic_signal.sumo.simulation.getCollisions()
+        ts_wait = sum(traffic_signal.get_accumulated_waiting_time_per_lane()) / 100.0
+        reward = traffic_signal.last_measure - ts_wait
+        traffic_signal.last_measure = ts_wait
+        if collisions:
+            reward = -0.1
+        return reward
+
+    @staticmethod
+    def _penalty_cutoff_reward_fn(traffic_signal: TrafficSignal) -> float:
+        collisions = traffic_signal.sumo.simulation.getCollisions()
+        ts_wait = sum(traffic_signal.get_accumulated_waiting_time_per_lane()) / 100.0
+        reward = traffic_signal.last_measure - ts_wait
+        traffic_signal.last_measure = ts_wait
+        if collisions:
+            reward = min(reward, 0)
+        return reward
+
+    @staticmethod
     def _get_environment(net_file: str, route_file: str, sumocfg_file: str, use_gui: bool, num_seconds: int,
                          out_csv_name: str = None, output_prefix: str = ''):
         sumo_cmd_options = {'--configuration-file': sumocfg_file}
@@ -52,11 +85,11 @@ class SumoEnvironmentGenerator:
             use_gui=use_gui,
             begin_time=0,
             num_seconds=num_seconds,
-            delta_time=5,  # seconds between actions
-            yellow_time=2,  # duration of the yellow phase
+            delta_time=1,  # seconds between actions
+            yellow_time=0,  # duration of the yellow phase
             min_green=5,  # minimum green time per phase
             single_agent=True,
-            reward_fn=SumoEnvironmentGenerator._reward_fn,  # define reward function
+            reward_fn=SumoEnvironmentGenerator._penalty_reward_minute_fn,  # define reward function
             observation_class=FrictionObservationFunction,  # subject to change
             add_system_info=True,
             add_per_agent_info=True,

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <vehicle id="southEast" type="carCustom" route="0" depart="0" departLane="best" departPos="base" departSpeed="last">
+         <!--param key="has.friction.device" value="true"/-->
+    </vehicle>
+    <vehicle id="southNorth" type="carCustom" route="1" depart="0" departLane="best" departPos="base" departSpeed="last">
+         <!--param key="has.friction.device" value="true"/-->
+    </vehicle>
+    <vehicle id="westEastTop" type="carCustom" route="2" depart="0" departLane="1" departPos="base" departSpeed="last">
+         <!--param key="has.friction.device" value="true"/-->
+    </vehicle>
+    <vehicle id="westEastBottom0" type="carCustom" route="2" depart="0" departLane="0" departPos="base" departSpeed="last">
+         <!--param key="has.friction.device" value="true"/-->
+    </vehicle>
+    <vehicle id="westEastBottom600" type="carCustom" route="2" depart="600" departLane="0" departPos="base" departSpeed="last">
+         <!--param key="has.friction.device" value="true"/-->
+    </vehicle>
+    <vehicle id="westEastBottom1200" type="carCustom" route="2" depart="1200" departLane="0" departPos="base" departSpeed="last">
+         <!--param key="has.friction.device" value="true"/-->
+    </vehicle>
+    <vehicle id="westEastBottom1800" type="carCustom" route="2" depart="1800" departLane="0" departPos="base" departSpeed="last">
+         <!--param key="has.friction.device" value="true"/-->
+    </vehicle>
+    <vehicle id="westEastBottom2400" type="carCustom" route="2" depart="2400" departLane="0" departPos="base" departSpeed="last">
+         <!--param key="has.friction.device" value="true"/-->
+    </vehicle>
+    <vehicle id="westEastBottom3000" type="carCustom" route="2" depart="3000" departLane="0" departPos="base" departSpeed="last">
+         <!--param key="has.friction.device" value="true"/-->
+    </vehicle>
+</routes>
