@@ -3,9 +3,6 @@ from gymnasium import spaces
 from sumo_rl import SumoEnvironment, TrafficSignal, ObservationFunction
 from pathlib import Path
 
-from env.CollisionAwareTrafficSignal import CollisionAwareTrafficSignal
-
-
 class SumoEnvironmentGenerator:
 
     def __init__(self, net_file: str, route_file: str, sumocfg_file: str, duration: int, learning_data_csv_name: str):
