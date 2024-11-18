@@ -42,6 +42,16 @@ class SumoEnvironmentGenerator:
         return reward
 
     @staticmethod
+    def _penalty_reward_minute_static_fn(traffic_signal: TrafficSignal) -> float:
+        simulation = traffic_signal.sumo.simulation
+        collisions = simulation.getCollisions()
+        ts_wait = sum(traffic_signal.get_accumulated_waiting_time_per_lane())
+        reward = ts_wait
+        if collisions:
+            reward = -60
+        return reward
+
+    @staticmethod
     def _penalty_reward_fn(traffic_signal: TrafficSignal) -> float:
         collisions = traffic_signal.sumo.simulation.getCollisions()
         ts_wait = sum(traffic_signal.get_accumulated_waiting_time_per_lane()) / 100.0
@@ -86,7 +96,7 @@ class SumoEnvironmentGenerator:
             yellow_time=0,  # duration of the yellow phase
             min_green=5,  # minimum green time per phase
             single_agent=True,
-            reward_fn=SumoEnvironmentGenerator._penalty_reward_minute_fn,  # define reward function
+            reward_fn=SumoEnvironmentGenerator._penalty_reward_minute_static_fn,  # define reward function
             observation_class=FrictionObservationFunction,  # subject to change
             add_system_info=True,
             add_per_agent_info=True,
