@@ -46,9 +46,9 @@ class SumoEnvironmentGenerator:
         simulation = traffic_signal.sumo.simulation
         collisions = simulation.getCollisions()
         ts_wait = sum(traffic_signal.get_accumulated_waiting_time_per_lane())
-        reward = ts_wait
+        reward = -ts_wait
         if collisions:
-            reward = -60
+            reward -= 60
         return reward
 
     @staticmethod

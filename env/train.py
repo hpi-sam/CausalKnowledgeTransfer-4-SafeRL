@@ -21,7 +21,7 @@ for flow in root.findall('flow'):
         case id if 'westEastBottom' in id:
             flow.set('end', str(float(flow.get('begin')) + 600))
             if float(flow.get('begin')) % 1200 == 0:
-                flow.set('period', f"exp({1 * INSERT_PROBABILITY})")
+                flow.set('period', f"exp({2 * INSERT_PROBABILITY})")
             else:
                 flow.set('period', f"exp({0.0001 * INSERT_PROBABILITY})")
 
@@ -55,7 +55,7 @@ model = A2C(
     tensorboard_log='dqn_sumo_tensorboard'
 )
 
-model_name = 'a2c_100step_2lane_1delta_minute_static_1traffic_50speed_server'
+model_name = 'a2c_alternating_server'
 model.learn(1_000_000, tb_log_name=model_name)
 model.save(Path().joinpath('env', 'training_data_2lane', model_name))
 print("Finished training")

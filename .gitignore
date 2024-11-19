@@ -11,3 +11,5 @@ __pycache__/
 /env/training_data_2lane/*
 /dqn_sumo_tensorboard/
 /data/
+data.zip
+
