@@ -1,0 +1,1 @@
+Bayesian models of the posterior distributions of the different interventions corresponding to distinct paths in the causal graph. 
