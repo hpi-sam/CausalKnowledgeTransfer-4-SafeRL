@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.DS_Store
 
 /nets/simple_unprotected_right/output/*
 /nets/simple_unprotected_right/*.xml
@@ -11,7 +12,9 @@ __pycache__/
 /env/training_data_2lane/*
 /dqn_sumo_tensorboard/
 /tensorboard/
+/screenshots/
 /data/
 /data_agent/
 data.zip
+data_agent.zip
 

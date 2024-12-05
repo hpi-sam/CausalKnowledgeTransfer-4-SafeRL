@@ -38,7 +38,7 @@ class SumoEnvironmentGenerator:
         reward = traffic_signal.last_measure - ts_wait
         traffic_signal.last_measure = ts_wait
         if collisions:
-            reward = -60
+            reward -= 60
         return reward
 
     @staticmethod
@@ -83,6 +83,12 @@ class SumoEnvironmentGenerator:
             sumo_cmd_options['--device.ssm.probability'] = '1.0'
             sumo_cmd_options['--device.ssm.file'] = str(Path(output_prefix + '_ssm.xml').absolute())
             sumo_cmd_options['--device.ssm.measures'] = "BR"
+
+        if use_gui:
+            sumo_seed = '42'
+        else:
+            sumo_seed = 'random'
+
         sumo_cmd = ' '.join(key + " " + value for key, value in sumo_cmd_options.items())
 
         env: SumoEnvironment = SumoEnvironment(
@@ -100,7 +106,7 @@ class SumoEnvironmentGenerator:
             observation_class=FrictionObservationFunction,  # subject to change
             add_system_info=True,
             add_per_agent_info=True,
-            sumo_seed='random',
+            sumo_seed=sumo_seed,
             sumo_warnings=use_gui,  # show warnings when gui is active
             additional_sumo_cmd=sumo_cmd,
         )
