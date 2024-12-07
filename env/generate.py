@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 print("Begin training configuration")
@@ -18,6 +19,8 @@ generation_combinations = [
     {'agent': agents_path.joinpath('a2c_s30_f1_new.zip'), 'speed': 8.33, 'friction': 1.0},
     {'agent': agents_path.joinpath('a2c_s80_f1.zip'), 'speed': 22.22, 'friction': 1.0},
 ]
+RANDOM_FRICTION = True
+rng = np.random.default_rng()
 
 for combination in generation_combinations:
     current_agent, current_speed, current_friction = combination.values()
@@ -137,17 +140,32 @@ for combination in generation_combinations:
 
     model = A2C.load(Path().joinpath(current_agent))
 
-    for i in range(100):
+    for i in range(100, 500):
         simulation_output_path = Path().joinpath('traces', current_agent.stem)
         Path.mkdir(simulation_output_path, parents=True, exist_ok=True)
         experiment_string = str(i).zfill(4)
         env = environments.get_generation_env(output_prefix=str(simulation_output_path.joinpath(experiment_string)))
         model.set_env(env)
+
+        if RANDOM_FRICTION:
+            friction_coefficient = rng.normal(rng.choice([0.25, 0.5, 0.75, 1]), 0.1)
+            current_friction = max(0.01, min(1.0, friction_coefficient))
+
         metadata = {'desiredSpeed': current_speed, 'friction': current_friction}
         pd.DataFrame(metadata, index=['metadata']).to_xml(
             Path(simulation_output_path).joinpath(experiment_string + '_metadata.xml'))
 
         obs, info = env.reset()
+
+        if RANDOM_FRICTION:
+            vehicletype = env.sumo.vehicletype
+            vehicletype.setDecel('carCustom', vehicletype.getDecel('carCustom') * current_friction)
+            vehicletype.setEmergencyDecel('carCustom',
+                                          vehicletype.getEmergencyDecel('carCustom') * current_friction)
+            for traffic_signal in env.traffic_signals.values():
+                for lane in traffic_signal.lanes:
+                    traffic_signal.sumo.lane.setParameter(lane, 'frictionCoefficient', current_friction)
+
         done = False
         while not done:
             action, _state = model.predict(obs, deterministic=True)
