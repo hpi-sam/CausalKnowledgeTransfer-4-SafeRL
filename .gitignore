@@ -15,6 +15,7 @@ __pycache__/
 /screenshots/
 /data/
 /data_agent/
+/traces/
 data.zip
 data_agent.zip
 
