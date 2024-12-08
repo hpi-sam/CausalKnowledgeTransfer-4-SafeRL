@@ -20,6 +20,7 @@ generation_combinations = [
     {'agent': agents_path.joinpath('a2c_s80_f1.zip'), 'speed': 22.22, 'friction': 1.0},
 ]
 RANDOM_FRICTION = True
+RANDOM_SPEED = True
 rng = np.random.default_rng()
 
 for combination in generation_combinations:
@@ -140,8 +141,8 @@ for combination in generation_combinations:
 
     model = A2C.load(Path().joinpath(current_agent))
 
-    for i in range(100, 500):
-        simulation_output_path = Path().joinpath('traces', current_agent.stem)
+    for i in range(500):
+        simulation_output_path = Path().joinpath('traces', current_agent.stem + "_random")
         Path.mkdir(simulation_output_path, parents=True, exist_ok=True)
         experiment_string = str(i).zfill(4)
         env = environments.get_generation_env(output_prefix=str(simulation_output_path.joinpath(experiment_string)))
@@ -150,15 +151,22 @@ for combination in generation_combinations:
         if RANDOM_FRICTION:
             friction_coefficient = rng.normal(rng.choice([0.25, 0.5, 0.75, 1]), 0.1)
             current_friction = max(0.01, min(1.0, friction_coefficient))
+        if RANDOM_SPEED:
+            possible_speeds = [8.33, 13.89, 22.22, 27.78, 36.11]
+            possible_speeds.remove(current_speed)
+            current_speed = rng.choice(possible_speeds)
 
         metadata = {'desiredSpeed': current_speed, 'friction': current_friction}
         pd.DataFrame(metadata, index=['metadata']).to_xml(
             Path(simulation_output_path).joinpath(experiment_string + '_metadata.xml'))
 
         obs, info = env.reset()
+        vehicletype = env.sumo.vehicletype
+
+        if RANDOM_SPEED:
+            vehicletype.setMaxSpeed('carCustom', current_speed)
 
         if RANDOM_FRICTION:
-            vehicletype = env.sumo.vehicletype
             vehicletype.setDecel('carCustom', vehicletype.getDecel('carCustom') * current_friction)
             vehicletype.setEmergencyDecel('carCustom',
                                           vehicletype.getEmergencyDecel('carCustom') * current_friction)
