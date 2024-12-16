@@ -14,7 +14,7 @@ if not sumo_home:
         "SUMO_HOME environment variable is not set. Please set it to your SUMO installation directory.")
 
 # Generation Parameters
-agents_path = Path().joinpath('env', 'agents_paper')
+agents_path = Path().joinpath('env', 'agents')
 RANDOM_FRICTION = True
 RANDOM_SPEED = True
 rng = np.random.default_rng()
@@ -132,7 +132,7 @@ print("Finished initiating environment")
 from stable_baselines3.a2c import A2C
 
 models = {
-    'scratch_s50_f0.5':     A2C.load(agents_path.joinpath('scratch_s50_f0.5.zip')),
+    'scratch_s50_f0.5': A2C.load(agents_path.joinpath('scratch_s50_f0.5.zip')),
     'scratch_s50_f1': A2C.load(agents_path.joinpath('scratch_s50_f1.zip')),
     'scratch_s80_f0.5': A2C.load(agents_path.joinpath('scratch_s80_f0.5.zip')),
     'scratch_s80_f1': A2C.load(agents_path.joinpath('scratch_s80_f1.zip')),
@@ -158,7 +158,7 @@ for i in range(1000):
 
     for model_name, model in models.items():
 
-        simulation_output_path = Path().joinpath('traces_paper', model_name + "_random")
+        simulation_output_path = Path().joinpath('traces', model_name + "_random")
         Path.mkdir(simulation_output_path, parents=True, exist_ok=True)
         experiment_string = str(i).zfill(4)
         env = environments.get_generation_env(output_prefix=str(simulation_output_path.joinpath(experiment_string)))

@@ -1,7 +1,7 @@
 # Causal-Knowledge-Transfer-Safe-RL
 Causal-Based Knowledge Transfer in Safe Reinforcement Learning
 
-## Setup
+## Setup/Installation
 1. Clone this repository.
 2. Install Sumo https://sumo.dlr.de/docs/Installing/index.html
     * Remember to set your SUMO_HOME environment variable https://sumo.dlr.de/docs/Basics/Basic_Computer_Skills.html#sumo_home

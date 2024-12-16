@@ -1,7 +1,0 @@
-<connections>
-
-    <connection from="westJunction" to="junctionEast" fromLane="0" toLane="0"/>
-    <connection from="southJunction" to="junctionNorth" fromLane="1" toLane="0"/>
-    <connection from="southJunction" to="junctionEast" fromLane="0" toLane="0"/>
-
-</connections>

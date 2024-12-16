@@ -4,27 +4,7 @@ __pycache__/
 *$py.class
 .DS_Store
 
-/nets/simple_unprotected_right/output/*
-/nets/simple_unprotected_right/*.xml
 /nets/2lane_unprotected_right/output/*
 /nets/2lane_unprotected_right/*.xml
-/env/training_data/*
-/env/training_data_2lane/*
-/env/agents_paper/*
-/tensorboard_paper/
-/dqn_sumo_tensorboard/
 /tensorboard/
-/traces 2/
 /screenshots/
-/data/
-/data_agent/
-/traces/
-traces.zip
-data.zip
-data_paper/
-traces_paper/
-data_agent.zip
-trces.zip
-tensorboard_paper.zip
-traces_paper_server.zip
-

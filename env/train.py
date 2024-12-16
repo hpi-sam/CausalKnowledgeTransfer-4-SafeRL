@@ -131,15 +131,15 @@ for i in range(2):
         policy='MlpPolicy',
         n_steps=100,
         verbose=1,
-        tensorboard_log='tensorboard_paper'
+        tensorboard_log='tensorboard'
     )
 
     model_name = 'transs50f0.5_s80_f0.5_' + str(i)
-    model = model.load(Path().joinpath('env', 'agents_paper', 'scratch_s50_f0.5.zip'), env=env,
-                           tensorboard_log='tensorboard_paper')
+    model = model.load(Path().joinpath('env', 'agents', 'scratch_s50_f0.5.zip'), env=env,
+                       tensorboard_log='tensorboard')
 
     print(model.policy, model.n_steps, model.verbose, model.tensorboard_log)
 
     model.learn(1_000_000, tb_log_name=model_name)
-    model.save(Path().joinpath('env', 'agents_paper', model_name + '.zip'))
+    model.save(Path().joinpath('env', 'agents', model_name + '.zip'))
     print("Finished training")
