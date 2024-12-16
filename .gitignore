@@ -14,7 +14,6 @@ __pycache__/
 /tensorboard_paper/
 /dqn_sumo_tensorboard/
 /tensorboard/
-/tensorboard_paper/
 /traces 2/
 /screenshots/
 /data/
@@ -22,7 +21,10 @@ __pycache__/
 /traces/
 traces.zip
 data.zip
+data_paper/
+traces_paper/
 data_agent.zip
 trces.zip
 tensorboard_paper.zip
+traces_paper_server.zip
 

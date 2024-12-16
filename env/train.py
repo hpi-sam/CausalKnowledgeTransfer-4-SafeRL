@@ -11,8 +11,8 @@ if not sumo_home:
         "SUMO_HOME environment variable is not set. Please set it to your SUMO installation directory.")
 
 # Constants / Parameters
-SPEED = 13.89
-FRICTION = 1.0
+SPEED = 22.22
+FRICTION = 0.5
 INSERT_PROBABILITY = 0.1
 DURATION = 3600
 REPEAT_PERIOD = 10
@@ -123,20 +123,23 @@ print("Finished initiating environment")
 
 print(f"Begin training with Speed {SPEED} and friction {FRICTION}")
 from stable_baselines3.a2c import A2C
-for model_name in ['scratch_s50_f1', 'scratch_s50_f0.5']:
-  env = environments.get_training_env()
-  model = A2C(
-      env=env,
-      policy='MlpPolicy',
-      n_steps=100,
-      verbose=1,
-      tensorboard_log='tensorboard_paper'
-  )
 
-  model = model.load(Path().joinpath('env', 'agents_paper', 'warmup_agent.zip'), env=env, tensorboard_log='tensorboard_paper')
+for i in range(2):
+    env = environments.get_training_env()
+    model = A2C(
+        env=env,
+        policy='MlpPolicy',
+        n_steps=100,
+        verbose=1,
+        tensorboard_log='tensorboard_paper'
+    )
 
-  print(model.policy, model.n_steps, model.verbose, model.tensorboard_log)
+    model_name = 'transs50f0.5_s80_f0.5_' + str(i)
+    model = model.load(Path().joinpath('env', 'agents_paper', 'scratch_s50_f0.5.zip'), env=env,
+                           tensorboard_log='tensorboard_paper')
 
-  model.learn(1_000_000, tb_log_name=model_name)
-  model.save(Path().joinpath('env', 'agents_paper', model_name + '.zip'))
-print("Finished training")
+    print(model.policy, model.n_steps, model.verbose, model.tensorboard_log)
+
+    model.learn(1_000_000, tb_log_name=model_name)
+    model.save(Path().joinpath('env', 'agents_paper', model_name + '.zip'))
+    print("Finished training")
