@@ -30,3 +30,5 @@ Causal-Based Knowledge Transfer in Safe Reinforcement Learning
 12. Install tqdm
     * Use `pip install tqdm`
     * `pip install ipywidgets`
+13. Install pymc
+    * Use `conda install -c conda-forge "pymc>=5"`

@@ -3,8 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 .DS_Store
+.ipynb_checkpoints
 
 /nets/2lane_unprotected_right/output/*
 /nets/2lane_unprotected_right/*.xml
 /tensorboard/
 /screenshots/
+
+distribution_shift
