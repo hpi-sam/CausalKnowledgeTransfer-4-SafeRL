@@ -11,8 +11,8 @@ if not sumo_home:
         "SUMO_HOME environment variable is not set. Please set it to your SUMO installation directory.")
 
 # Constants / Parameters
-SPEED = 22.22
-FRICTION = 0.5
+SPEED = 13.89
+FRICTION = 1.0
 INSERT_PROBABILITY = 0.1
 DURATION = 3600
 REPEAT_PERIOD = 10
@@ -134,7 +134,7 @@ for i in range(2):
         tensorboard_log='tensorboard'
     )
 
-    model_name = 'transs50f0.5_s80_f0.5_' + str(i)
+    model_name = 'transs50f0.5_s50_f1_' + str(i)
     model = model.load(Path().joinpath('env', 'agents', 'scratch_s50_f0.5.zip'), env=env,
                        tensorboard_log='tensorboard')
 

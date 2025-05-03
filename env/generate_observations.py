@@ -21,7 +21,7 @@ if not sumo_home:
 agents_path = Path().joinpath('env', 'agents')
 rng = np.random.default_rng()
 SPEED = float(80) / 3.6
-FRICTION = 0.8
+FRICTION = 0.5
 
 # Constants / Parameters
 INSERT_PROBABILITY = 0.1
@@ -133,10 +133,10 @@ environments = SumoEnvironmentGenerator(
 print("Finished initiating environment")
 from stable_baselines3.a2c import A2C
 
-model_name = 'scratch_s80_f1'
+model_name = 'scratch_s50_f0.5'
 model = A2C.load(agents_path.joinpath(model_name + '.zip'))
 simulation_output_path = Path().joinpath('distribution_shift', 'traces',
-                                         model_name + f"_shift_s{int(SPEED * 3.6)}_f{FRICTION}.xml")
+                                         model_name + f"_shift_s{int(SPEED * 3.6)}_f{FRICTION}")
 
 print(f"Begin generating with Speed {SPEED} and friction {FRICTION}")
 

@@ -9,5 +9,6 @@ __pycache__/
 /nets/2lane_unprotected_right/*.xml
 /tensorboard/
 /screenshots/
+/env/training_data
 
 distribution_shift

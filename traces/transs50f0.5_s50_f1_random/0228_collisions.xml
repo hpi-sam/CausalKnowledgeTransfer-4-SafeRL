@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2025-04-29 09:46:07 by Eclipse SUMO sumo Version 1.20.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="nets/2lane_unprotected_right/2lane_unprotected_right.net.xml"/>
+        <route-files value="nets/2lane_unprotected_right/2lane_unprotected_right.rou.xml"/>
+    </input>
+
+    <output>
+        <tripinfo-output value="traces/transs50f0.5_s50_f1_random/0228_tripinfo.xml"/>
+        <collision-output value="traces/transs50f0.5_s50_f1_random/0228_collisions.xml"/>
+        <statistic-output value="traces/transs50f0.5_s50_f1_random/0228_statistics.xml"/>
+    </output>
+
+    <processing>
+        <collision.action value="teleport"/>
+        <collision.check-junctions value="true"/>
+        <time-to-teleport value="-1"/>
+        <waiting-time-memory value="1000"/>
+        <max-depart-delay value="-1"/>
+        <default.speeddev value="0.1"/>
+    </processing>
+
+    <report>
+        <no-warnings value="true"/>
+    </report>
+
+    <ssm_device>
+        <device.ssm.probability value="1.0"/>
+        <device.ssm.measures value="BR"/>
+        <device.ssm.file value="/Users/finn/Code/CausalKnowledgeTransfer-4-SafeRL/traces/transs50f0.5_s50_f1_random/0228_ssm.xml"/>
+    </ssm_device>
+
+    <traci_server>
+        <remote-port value="65222"/>
+    </traci_server>
+
+    <random_number>
+        <random value="true"/>
+    </random_number>
+
+</configuration>
+-->
+
+<collisions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/collision_file.xsd">
+    <collision time="47.00" type="collision" lane="junctionEast_0" pos="3.40" collider="southEast.0" victim="westEastBottom0.2" colliderType="carCustom" victimType="carCustom" colliderSpeed="6.22" victimSpeed="18.23"/>
+    <collision time="159.00" type="collision" lane="junctionEast_0" pos="3.87" collider="southEast.15" victim="westEastBottom0.14" colliderType="carCustom" victimType="carCustom" colliderSpeed="6.99" victimSpeed="12.44"/>
+    <collision time="190.00" type="collision" lane="junctionEast_0" pos="0.02" collider="southEast.16" victim="westEastBottom0.21" colliderType="carCustom" victimType="carCustom" colliderSpeed="5.23" victimSpeed="11.29"/>
+    <collision time="576.00" type="collision" lane="junctionEast_0" pos="1.24" collider="westEastBottom0.59" victim="southEast.50" colliderType="carCustom" victimType="carCustom" colliderSpeed="9.84" victimSpeed="5.18"/>
+    <collision time="618.00" type="collision" lane="junctionEast_0" pos="7.31" collider="westEastBottom0.61" victim="southEast.56" colliderType="carCustom" victimType="carCustom" colliderSpeed="12.43" victimSpeed="7.15"/>
+    <collision time="1496.00" type="collision" lane="junctionEast_0" pos="1.02" collider="southEast.132" victim="westEastBottom1200.19" colliderType="carCustom" victimType="carCustom" colliderSpeed="5.17" victimSpeed="15.43"/>
+    <collision time="1654.00" type="collision" lane="junctionEast_0" pos="4.96" collider="southEast.145" victim="westEastBottom1200.39" colliderType="carCustom" victimType="carCustom" colliderSpeed="5.53" victimSpeed="8.96"/>
+    <collision time="1698.00" type="collision" lane="junctionEast_0" pos="8.95" collider="westEastBottom1200.45" victim="southEast.150" colliderType="carCustom" victimType="carCustom" colliderSpeed="10.02" victimSpeed="6.84"/>
+    <collision time="1739.00" type="collision" lane="junctionEast_0" pos="4.70" collider="southEast.155" victim="westEastBottom1200.52" colliderType="carCustom" victimType="carCustom" colliderSpeed="4.83" victimSpeed="9.05"/>
+    <collision time="2503.00" type="collision" lane="junctionEast_0" pos="4.61" collider="westEastBottom2400.7" victim="southEast.215" colliderType="carCustom" victimType="carCustom" colliderSpeed="6.63" victimSpeed="6.85"/>
+    <collision time="2742.00" type="collision" lane="junctionEast_0" pos="0.86" collider="southEast.237" victim="westEastBottom2400.32" colliderType="carCustom" victimType="carCustom" colliderSpeed="5.42" victimSpeed="18.61"/>
+    <collision time="2918.00" type="collision" lane="junctionEast_0" pos="6.26" collider="westEastBottom2400.43" victim="southEast.251" colliderType="carCustom" victimType="carCustom" colliderSpeed="13.50" victimSpeed="7.37"/>
+    <collision time="2960.00" type="collision" lane="junctionEast_0" pos="2.52" collider="southEast.256" victim="westEastBottom2400.47" colliderType="carCustom" victimType="carCustom" colliderSpeed="6.01" victimSpeed="8.44"/>
+</collisions>

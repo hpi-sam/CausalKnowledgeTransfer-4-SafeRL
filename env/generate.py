@@ -132,19 +132,15 @@ print("Finished initiating environment")
 from stable_baselines3.a2c import A2C
 
 models = {
-    'scratch_s50_f0.5': A2C.load(agents_path.joinpath('scratch_s50_f0.5.zip')),
-    'scratch_s50_f1': A2C.load(agents_path.joinpath('scratch_s50_f1.zip')),
-    'scratch_s80_f0.5': A2C.load(agents_path.joinpath('scratch_s80_f0.5.zip')),
-    'scratch_s80_f1': A2C.load(agents_path.joinpath('scratch_s80_f1.zip')),
-    'transs50f1_s80_f1': A2C.load(agents_path.joinpath('transs50f1_s80_f1_1.zip')),
-    'transs80f1_s80_f0.5': A2C.load(agents_path.joinpath('transs80f1_s80_f0.5_0.zip'))
+    'transs50f0.5_s50_f1': A2C.load(agents_path.joinpath('transs50f0.5_s50_f1.zip')),
+    'transs50f1_s50_f0.5': A2C.load(agents_path.joinpath('transs50f1_s50_f0.5.zip'))
 }
 
 
 print(f"Begin generating with Speed {SPEED} and friction {FRICTION}")
 
 
-for i in range(1000):
+for i in range(274):
 
     current_friction = FRICTION
     current_speed = SPEED
