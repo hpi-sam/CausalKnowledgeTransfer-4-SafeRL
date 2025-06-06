@@ -1,4 +1,3 @@
-
 # Robust RL Training
 
 ## Follow the instructions in the context the paper attached "Yang, Rui, et al. "Rorl: Robust offline reinforcement learning via conservative smoothing."
