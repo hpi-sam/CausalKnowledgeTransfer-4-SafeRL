@@ -10,5 +10,6 @@ __pycache__/
 /tensorboard/
 /screenshots/
 /env/training_data
+/env/agents/warmup_agent/
 
 distribution_shift

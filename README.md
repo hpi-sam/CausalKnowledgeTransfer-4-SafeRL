@@ -32,5 +32,3 @@ Causal-Based Knowledge Transfer in Safe Reinforcement Learning
     * `pip install ipywidgets`
 13. Install pymc
     * Use `conda install -c conda-forge "pymc>=5"`
-14. Install pymc-experimental
-15. * Use `pip install pymc-experimental`

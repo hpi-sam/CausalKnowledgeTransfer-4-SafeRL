@@ -1,6 +1,6 @@
 import warnings
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict, List
 
 import arviz as az
 import networkx as nx
@@ -13,69 +13,97 @@ from matplotlib import pyplot as plt
 from causal_discovery import run_causal_discovery
 from utils import read_data
 
+# Configure PyTensor
 pytensor.config.cxx = ''
 pytensor.config.floatX = "float64"
 
 
 def generate_scm_layers(structural_causal_graph: nx.DiGraph) -> tuple[dict, dict]:
-    assert nx.is_directed_acyclic_graph(structural_causal_graph)
-    node_layers = {node: 0 for node in structural_causal_graph.nodes}
-    predecessors = {node: list(structural_causal_graph.predecessors(node)) for node in structural_causal_graph.nodes}
-    visited = set(node for node, predecessor_nodes in predecessors.items() if len(predecessor_nodes) == 0)
+    """Generates layers and predecessors for nodes in a DAG.
 
-    # Find layers for each node
-    current_layer = max(node_layers.values()) + 1
-    while len(visited) < len(structural_causal_graph.nodes):
-        unprocessed = set(structural_causal_graph.nodes) - visited
-        current_nodes = [node for node in unprocessed if visited.issuperset(predecessors[node])]
-        for node in current_nodes:
-            node_layers[node] = current_layer
-        visited.update(current_nodes)
-        current_layer += 1
+    Args:
+        structural_causal_graph: A directed acyclic graph (DAG).
+
+    Returns:
+        Tuple containing node layers and predecessors.
+    """
+    if not nx.is_directed_acyclic_graph(structural_causal_graph):
+        raise ValueError("SCM must be a directed acyclic graph (DAG).")
+
+    # Get topological generations (layers)
+    layers = list(nx.topological_generations(structural_causal_graph))
+    node_layers = {
+        node: layer_number
+        for layer_number, layer_nodes in enumerate(layers)
+        for node in layer_nodes
+    }
+    predecessors = {
+        node: list(structural_causal_graph.predecessors(node))
+        for node in structural_causal_graph.nodes
+    }
     return node_layers, predecessors
+
+
+def _should_observe_node(effect: str, node: str, predecessors: List[str], outcome_variables: List[str]) -> bool:
+    """Determines if a node should be modeled as observed."""
+    if effect == 'total':
+        return len(predecessors) > 0
+    elif effect == 'direct':
+        return node in outcome_variables
+    raise ValueError(f"Invalid effect type: {effect}")
+
+
+def _get_predictor(effect: str, predecessor: str, node_layers: Dict[str, int], independent_data: Dict,
+                   obs_data: Dict):
+    """Selects appropriate predictor variable based on effect type and node layer of predecessors"""
+    if effect == 'direct':
+        return independent_data[predecessor]
+    return independent_data[predecessor] if node_layers[predecessor] == 0 else obs_data[predecessor]
+
+
+def _get_beta_name(node, predecessors):
+    current_predecessor_string = ', '.join(f'{index}:{name}' for index, name in enumerate(predecessors[node]))
+    current_node_beta_name = f"{node} beta * ({current_predecessor_string})"
+    return current_node_beta_name
 
 
 def generate_scm_effect_model(data: pd.DataFrame, structural_causal_graph: nx.DiGraph,
                               effect: str = 'total') -> pm.Model:
-    """Generate SCM model for either total or direct effects."""
-
+    """Generates SCM model for total or direct effects."""
     if effect not in {'total', 'direct'}:
-        raise ValueError("Effect must be either 'total' or 'direct'")
+        raise ValueError("Effect must be 'total' or 'direct'")
 
     node_layers, predecessors = generate_scm_layers(structural_causal_graph)
-    outcome_variables = [node for node in structural_causal_graph.nodes if
-                         structural_causal_graph.out_degree(node) == 0]
+    outcome_variables = [node for node, out_degree in structural_causal_graph.out_degree() if out_degree == 0]
     df_standardized = (data - data.mean()) / data.std()
-    values = {column: df_standardized[column].values for column in df_standardized.columns}
-    alpha, beta, sigma, mu, obs, independent_data = {}, {}, {}, {}, {}, {}
+    # values = {column: df_standardized[column].values for column in df_standardized.columns}
 
-    with pm.Model() as structural_causal_model:
-        for node in sorted(node_layers.keys(), key=node_layers.__getitem__):
-            node_should_be_observed = (effect == 'total' and predecessors[node]) or (
-                    effect == 'direct' and node in outcome_variables)
-            if node_should_be_observed:
-                alpha[node] = pm.Normal(f"{node} alpha", mu=0, sigma=10)
+    with pm.Model() as model:
+        independent_data: Dict[str, pm.Data] = {}
+        observations: Dict[str, pm.Normal] = {}
 
-                current_predecessor_string = ', '.join(
-                    f'{index}:{name}' for index, name in enumerate(predecessors[node]))
-                current_node_beta_name = f"{node} beta * ({current_predecessor_string})"
+        for node in sorted(node_layers, key=node_layers.get):
+            should_observe = _should_observe_node(effect, node, predecessors[node], outcome_variables)
 
-                beta[node] = pm.Normal(current_node_beta_name, mu=0, sigma=10, shape=len(predecessors[node]))
-                sigma[node] = pm.HalfNormal(f"{node} sigma", sigma=1)
+            if should_observe:
+                # Create model variables
+                alpha = pm.Normal(f"{node} alpha", mu=0, sigma=10)
+                beta = pm.Normal(_get_beta_name(node, predecessors), mu=0, sigma=10, shape=len(predecessors[node]))
+                # beta = pm.Normal(current_node_beta_name, mu=0, sigma=10, shape=len(predecessors[node]), dims="predictors")
+                sigma = pm.HalfNormal(f"{node} sigma", sigma=1)
 
-                mu[node] = alpha[node]
-                for i, predecessor in enumerate(predecessors[node]):
-                    if effect == 'total':
-                        predictor = independent_data[predecessor] if node_layers[predecessor] == 0 else obs[predecessor]
-                    else:
-                        predictor = independent_data[predecessor]
-                    mu[node] += beta[node][i] * predictor
+                # Create predictors list
+                predictors = [
+                    _get_predictor(effect, predecessor, node_layers, independent_data, observations)
+                    for predecessor in predecessors[node]
+                ]
 
-                obs[node] = pm.Normal(f"{node} obs", mu=mu[node], sigma=sigma[node], observed=values[node])
+                mu = alpha + pm.math.dot(beta, predictors)
+                observations[node] = pm.Normal(f"{node}_obs", mu=mu, sigma=sigma, observed=df_standardized[node].values)
             else:
-                # Make sure independent variables are modeled
-                independent_data[node] = pm.Data(f"{node}_data", values[node])
-    return structural_causal_model
+                independent_data[node] = pm.Data(f"{node}_data", df_standardized[node].values)
+
+    return model
 
 
 def _shorten_graph_nodes(graph: nx.DiGraph) -> nx.DiGraph:
@@ -125,59 +153,47 @@ def _shorten_graph_nodes(graph: nx.DiGraph) -> nx.DiGraph:
 
 
 def visualize_scm_model(model: pm.Model, title: str) -> None:
+    """Visualizes a PyMC model as a network graph."""
+    STYLE_OPTIONS = {
+        'with_labels': True,
+        'node_size': 2500,
+        'node_color': 'skyblue',
+        'edge_color': 'gray',
+        'width': 3,
+        'font_size': 14,
+        'font_weight': 'bold',
+        'arrowsize': 15
+    }
+
     model_graph = pm.model_to_networkx(model)
     model_graph = _shorten_graph_nodes(model_graph)
 
-    plt.figure(figsize=(20, 20))  # Set viewport size (width, height in inches)
+    plt.figure(figsize=(20, 20))
     plt.title(title)
-
-    nx.draw(
-        model_graph,
-        pos=nx.planar_layout(model_graph, scale=1),  # Increase node spacing
-        with_labels=True,
-        node_size=2500,  # Increase node size (default 300)
-        node_color='skyblue',  # Better visibility
-        edge_color='gray',  # Better visibility
-        width=3,  # Increase edge thickness (default 1)
-        font_size=14,  # Increase label size
-        font_weight='bold',  # Improve label readability
-        arrowsize=15  # Increase arrow size for directed edges
-    )
-
+    pos = nx.planar_layout(model_graph, scale=1.5)
+    nx.draw(model_graph, pos=pos, **STYLE_OPTIONS)
     plt.show()
 
 
 def fit_model(model: pm.Model, cache_path: Optional[Path] = None) -> az.InferenceData:
-    """Fits a PyMC model with optional caching of sampling results.
+    """Fits a model with optional caching."""
+    if cache_path and not cache_path.exists():
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
 
-    Args:
-        model: PyMC model to fit
-        cache_path: Optional path to cache/load the fitted model.
-            If provided and file exists, loads cached results instead of sampling.
-
-    Returns:
-        InferenceData with sampling results
-
-    Raises:
-        FileNotFoundError: If cache_path is provided but doesn't exist
-    """
     with model:
         if cache_path and cache_path.exists():
-            warnings.warn(f"Loading cached results from {cache_path} - no new sampling performed", UserWarning,
-                          stacklevel=2)
-            idata = az.from_netcdf(str(cache_path))
-        else:
-            idata = pm.sample()
+            warnings.warn(f"Loading cached results from {cache_path}", UserWarning, stacklevel=2)
+            return az.from_netcdf(str(cache_path))
 
-            if cache_path:
-                # Ensure parent directory exists before saving
-                cache_path.parent.mkdir(parents=True, exist_ok=True)
-                idata.to_netcdf(str(cache_path))
-    return idata
+        idata = pm.sample()
+        if cache_path:
+            idata.to_netcdf(str(cache_path))
+        return idata
 
 
-def sample_posterior(model: pm.Model, idata: az.InferenceData, input_variables: list,
-                     standardized_observation_data: pd.DataFrame):
+def sample_posterior(model: pm.Model, idata: az.InferenceData, input_variables: List[str],
+                     standardized_observation_data: pd.DataFrame) -> Dict[str, np.ndarray]:
+    """Samples from the posterior predictive distribution."""
     with model:
         thinned_idata = idata.sel(chain=[0], draw=slice(None, None, 1000))
 
@@ -236,8 +252,9 @@ def main():
 
     posterior = sample_posterior(scm_total_effect_model, trace_data, independent_variables, obs_data)
     print(posterior)
+    print(scm_total_effect_model)
 
-    visualize = False
+    visualize = True
     if visualize:
         visualize_scm_model(scm_total_effect_model, "Total Effect Model")
         visualize_scm_model(scm_reverse_model, "Reverse Effect Model")

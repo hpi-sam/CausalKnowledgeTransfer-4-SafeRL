@@ -1,7 +1,7 @@
 """
 Causal discovery pipeline with PC algorithm and edge direction confidence analysis.
 """
-
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
@@ -13,6 +13,15 @@ from castle.algorithms import PC
 from castle.common.priori_knowledge import PrioriKnowledge
 from scipy.stats import spearmanr
 from sklearn.linear_model import LinearRegression
+
+from utils import read_data
+
+
+@dataclass
+class CausalDiscoveryResult:
+    causal_graph: nx.DiGraph
+    mediator_graph: nx.DiGraph
+    traces: pd.DataFrame
 
 
 def create_priori_knowledge(data: pd.DataFrame, independent_variables: list[str],
@@ -181,20 +190,6 @@ def visualize_causal_graph(graph: nx.DiGraph, title: str) -> None:
     plt.show()
 
 
-def read_data(data_path: Path, columns: Optional[list[str]]) -> pd.DataFrame:
-    """Read observational data from CSV file.
-
-    Args:
-        data_path: Path to CSV file
-        columns: Optional subset of columns to load
-
-    Returns:
-        DataFrame with selected columns
-    """
-    df = pd.read_csv(data_path)
-    return df[columns] if columns else df
-
-
 def generate_causal_graph(data: pd.DataFrame, independent_variables: list[str], outcome_variables: list[str],
                           adjust_edge_direction: bool = True) -> nx.DiGraph:
     """Execute full causal discovery pipeline.
@@ -239,14 +234,12 @@ def get_mediator_graph(causal_graph: nx.DiGraph, independent_variables: list[str
     return reversed_graph
 
 
-def run_causal_discovery(data_path: Path, columns: list[str], independent_variables: list[str],
-                         outcome_variables: list[str], visualize: bool = True) -> dict[
-    str, nx.DiGraph]:
+def run_causal_discovery(data: pd.DataFrame, independent_variables: list[str],
+                         outcome_variables: list[str], visualize: bool = True) -> CausalDiscoveryResult:
     """Main execution pipeline for causal discovery.
 
     Args:
-        data_path: Path to observational data
-        columns: Optional subset of columns to analyze
+        data: pd.DataFrame of observational data
         visualize: Whether to display generated graphs
         independent_variables: List of independent variables
         outcome_variables: List of outcome variables
@@ -256,10 +249,9 @@ def run_causal_discovery(data_path: Path, columns: list[str], independent_variab
         - causal_graph: Final adjusted causal graph
         - mediator_graph: Reversed mediator-focused graph
     """
-    if not (set(independent_variables) | (set(outcome_variables))).issubset(set(columns)):
-        raise ValueError("Independent and outcome variables must be a subset of columns.")
+    if not (set(independent_variables) | (set(outcome_variables))).issubset(set(data.columns)):
+        raise ValueError("Independent and outcome variables must be a subset of data columns.")
 
-    data = read_data(data_path, columns)
     causal_graph = generate_causal_graph(data, independent_variables, outcome_variables)
 
     mediator_graph = get_mediator_graph(causal_graph, independent_variables)
@@ -268,7 +260,7 @@ def run_causal_discovery(data_path: Path, columns: list[str], independent_variab
         visualize_causal_graph(causal_graph, "Discovered Causal Graph")
         visualize_causal_graph(mediator_graph, "Reversed Mediator Causal Graph")
 
-    return {"causal_graph": causal_graph, "mediator_graph": mediator_graph}
+    return CausalDiscoveryResult(causal_graph=causal_graph, mediator_graph=mediator_graph, traces=data)
 
 
 def main():
@@ -281,10 +273,11 @@ def main():
         "emergencyBraking",
         "collisions",
     ]
+    data = read_data(data_path, selected_columns)
     independent_variables = ["desiredSpeed", "friction"]
     outcome_variables = ["waitingTime", "collisions"]
 
-    run_causal_discovery(data_path, selected_columns, independent_variables, outcome_variables, visualize=True)
+    run_causal_discovery(data, independent_variables, outcome_variables, visualize=True)
 
 
 if __name__ == "__main__":
